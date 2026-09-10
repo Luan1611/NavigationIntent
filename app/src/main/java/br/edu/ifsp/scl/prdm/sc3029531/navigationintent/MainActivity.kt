@@ -10,10 +10,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.navigation.MainNavHost
+import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.navigation.Screen
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.composable.component.MainTopAppBar
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.composable.screen.IntentScreen
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.theme.NavigationIntentTheme
@@ -28,14 +32,29 @@ class MainActivity : ComponentActivity() {
 
             val navHostController = rememberNavController()
 
+
+            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+
+            // há um observador na showActions, que é a MainTopAppBar, que se recompõe a cada mudança na variavel
+            val showActions = navBackStackEntry?.destination?.route == Screen.IntentScreen.route
+
+            val mainViewModel: MainViewModel = viewModel()
+
             NavigationIntentTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { MainTopAppBar(navHostController) } // ou topBar = { MainTopAppBar() }
+                    topBar = {
+
+                        //injeta uma função no MainTopAppBar
+                        MainTopAppBar(showActions = showActions) { destination ->
+                            navHostController.navigate(destination)
+                        }
+                    } // ou topBar = { MainTopAppBar() }
                     ) { innerPadding ->
                     MainNavHost(
                         navHostController = navHostController,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        mainViewModel = mainViewModel
                     )
 
                 }

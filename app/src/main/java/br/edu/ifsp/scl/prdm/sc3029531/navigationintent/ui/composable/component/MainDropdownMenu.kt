@@ -23,7 +23,7 @@ import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.navigation.Screen
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.theme.NavigationIntentTheme
 
 @Composable
-fun MainDropdownMenu(navHostController: NavHostController) {
+fun MainDropdownMenu(onNavigate: (String) -> Unit) {
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -44,9 +44,10 @@ fun MainDropdownMenu(navHostController: NavHostController) {
             DropdownMenuItem(
                 text = { Text("Set parameter") },
                 onClick = {
-                    // Navega para ParameterScreen
 
-                    navHostController.navigate(Screen.ParameterScreen.route)
+                    // Navega para ParameterScreen
+                    onNavigate(Screen.ParameterScreen.route)
+                    expanded = false
 
                 }
             )
@@ -69,7 +70,7 @@ fun MainDropdownMenu(navHostController: NavHostController) {
 fun MainDropdownMenuPreview() {
     NavigationIntentTheme {
         Surface {
-            MainDropdownMenu(rememberNavController())
+            MainDropdownMenu {}
         }
     }
 }

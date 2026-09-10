@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,8 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.theme.NavigationIntentTheme
 
 @Composable
-fun ParameterScreen(modifier: Modifier) {
-    var parameter by remember { mutableStateOf("") }
+fun ParameterScreen(
+    receivedParameter: String,
+    modifier: Modifier,
+    onSaveAndQuit: (String) -> Unit
+    ) {
+    var parameter by remember { mutableStateOf(receivedParameter) }
     Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = parameter,
@@ -26,6 +31,15 @@ fun ParameterScreen(modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { parameter = it }
         )
+
+        Button(
+            onClick = {
+                onSaveAndQuit(parameter)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Save and quit")
+        }
     }
 }
 
@@ -46,7 +60,10 @@ fun ParameterScreenPreview() {
         // Usando o Surface somente para dar cor de fundo no preview. Sem ele, o fundo fica
         // transparente e não dá para ver o preview em tema escuro.
         Surface {
-            ParameterScreen(Modifier)
+            ParameterScreen(
+                receivedParameter = "",
+                modifier = Modifier
+            ) {  }
         }
     }
 }

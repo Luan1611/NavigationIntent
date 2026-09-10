@@ -22,7 +22,7 @@ import br.edu.ifsp.scl.prdm.sc3029531.navigationintent.ui.theme.NavigationIntent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopAppBar(navHostController: NavHostController) {
+fun MainTopAppBar(showActions: Boolean, onNavigate: (String) -> Unit) {
     TopAppBar(
         title = { Text(stringResource(R.string.app_name)) },
         modifier = Modifier.fillMaxWidth(),
@@ -31,7 +31,7 @@ fun MainTopAppBar(navHostController: NavHostController) {
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             subtitleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
-        actions = { MainDropdownMenu(navHostController) }
+        actions = { if (showActions) MainDropdownMenu(onNavigate) }
     )
 
 }
@@ -51,7 +51,7 @@ fun MainTopAppBar(navHostController: NavHostController) {
 fun MainTopAppBarPreview() {
     NavigationIntentTheme {
         Surface {
-            MainTopAppBar(rememberNavController())
+            MainTopAppBar(true) {}
         }
     }
 
